@@ -39,13 +39,6 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
-# Large video files (add manually or via Git LFS / Google Drive)
-Video/*.mp4
-Video/*.avi
-Video/*.mov
-Video/*.mkv
-Video/*.wmv
-
 # Uploaded user data (PDFs in data/)
 data/uploads/
 sample_data/
