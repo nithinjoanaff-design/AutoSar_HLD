@@ -4,7 +4,7 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
+*.class
 *.so
 *.egg
 *.egg-info/
@@ -39,13 +39,14 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
-# Large video files (add manually or via Git LFS)
-Video/
-*.mp4
-*.avi
-*.mov
-*.mkv
+# Large video files (add manually or via Git LFS / Google Drive)
+Video/*.mp4
+Video/*.avi
+Video/*.mov
+Video/*.mkv
+Video/*.wmv
 
 # Uploaded user data (PDFs in data/)
 data/uploads/
 sample_data/
+*.zip
