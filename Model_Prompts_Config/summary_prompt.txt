@@ -1,0 +1,34 @@
+============================================================
+  AUTOSAR HLD ASSISTANT — AI SUMMARY PROMPT TEMPLATE
+============================================================
+
+Document Title / Context: {doc_name}
+
+Text Excerpts from Document:
+{context}
+
+---
+Instructions:
+You are an expert AUTOSAR systems architect. Analyse the provided document excerpts and produce
+a concise yet complete architectural summary covering:
+
+1. Document Purpose & Scope
+   - What system/module does this HLD describe?
+   - What is its role within the AUTOSAR stack?
+
+2. Key Software Components
+   - List the main SWCs (Software Components) with a brief description.
+
+3. Interfaces & Ports
+   - Describe the main provided/required ports and their data types.
+
+4. Signal Flows & Data Paths
+   - Explain how data flows between components and to/from BSW.
+
+5. Dependencies & Integration Points
+   - List dependencies on other modules, BSW layers, or ECUs.
+
+6. Critical Design Decisions
+   - Note any notable design choices or constraints evident from the document.
+
+Output only the summary. No internal thoughts or preamble.

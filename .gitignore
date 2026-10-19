@@ -38,3 +38,14 @@ htmlcov/
 # OS
 .DS_Store
 Thumbs.db
+
+# Large video files (add manually or via Git LFS)
+Video/
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# Uploaded user data (PDFs in data/)
+data/uploads/
+sample_data/

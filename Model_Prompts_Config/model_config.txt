@@ -1,0 +1,32 @@
+# Model & Configuration Settings
+# AUTOSAR HLD Intelligence & Traceability Assistant
+# =====================================================
+
+# ── LLM Provider ──────────────────────────────────────────────────────────────
+LLM_PROVIDER=ollama                      # Options: ollama | openrouter | openai | anthropic | none
+
+# ── Ollama (Local LLM) ────────────────────────────────────────────────────────
+OLLAMA_MODEL=deepseek-r1:1.5b            # Local model used for inference
+OLLAMA_BASE_URL=http://localhost:11434   # Ollama server endpoint
+
+# ── Embedding Model ───────────────────────────────────────────────────────────
+EMBEDDING_MODEL=all-MiniLM-L6-v2        # SentenceTransformer model for embeddings
+
+# ── Retrieval Settings ────────────────────────────────────────────────────────
+RETRIEVAL_TOP_K_VECTOR=15               # Number of candidates from FAISS (stage 1)
+RETRIEVAL_TOP_K_RERANK=5                # Number of results after re-ranking (stage 2)
+
+# ── Re-Ranking Model ──────────────────────────────────────────────────────────
+RERANKER_MODEL=cross-encoder/ms-marco-MiniLM-L-6-v2  # CrossEncoder for re-ranking
+
+# ── Chunking Settings ─────────────────────────────────────────────────────────
+CHUNK_SIZE=800                          # Characters per text chunk
+CHUNK_OVERLAP=150                       # Overlap between consecutive chunks
+
+# ── LLM Generation Settings ───────────────────────────────────────────────────
+MAX_TOKENS=2500                         # Maximum tokens for LLM response
+TEMPERATURE=0.1                         # Low temp for factual/deterministic output
+
+# ── Safety Settings ───────────────────────────────────────────────────────────
+HARMFUL_QUESTION_GUARD=enabled          # Block harmful/dangerous queries
+NOT_IN_DOCUMENT_DETECTION=enabled       # Show red summary only when info not in PDF

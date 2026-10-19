@@ -28,10 +28,210 @@ logger = logging.getLogger(__name__)
 # ── Page configuration ────────────────────────────────────────────────────────
 
 st.set_page_config(
-    page_title="AUTOSAR HLD Assistant",
-    page_icon="🚗",
+    page_title="AUTOSAR HLD Intelligence & Traceability Assistant",
+    page_icon="⚡",
     layout="wide",
     initial_sidebar_state="expanded",
+)
+
+# ── Custom Futuristic Automotive Theme & Styling ─────────────────────────────
+st.markdown(
+    """
+    <style>
+    /* Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    html, body, [class*="css"] {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    code, pre, [class*="stCode"] {
+        font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    /* Ambient background gradient overlay */
+    .stApp {
+        background: radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.05) 0%, transparent 40%),
+                    radial-gradient(circle at 90% 80%, rgba(112, 0, 255, 0.05) 0%, transparent 40%),
+                    #0B111E !important;
+    }
+
+    /* Top Hero Banner */
+    .hero-container {
+        background: linear-gradient(135deg, rgba(21, 32, 51, 0.85) 0%, rgba(13, 20, 36, 0.95) 100%);
+        border: 1px solid rgba(0, 210, 255, 0.2);
+        border-radius: 16px;
+        padding: 24px 30px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px -10px rgba(0, 210, 255, 0.15);
+        backdrop-filter: blur(12px);
+    }
+
+    .hero-title {
+        font-size: 2.1rem;
+        font-weight: 800;
+        background: linear-gradient(120deg, #FFFFFF 20%, #00D2FF 80%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .hero-badge {
+        display: inline-block;
+        background: rgba(0, 210, 255, 0.12);
+        color: #00D2FF;
+        border: 1px solid rgba(0, 210, 255, 0.3);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+        color: #94A3B8;
+        font-size: 0.95rem;
+        margin-top: 6px;
+        margin-bottom: 0;
+        line-height: 1.5;
+    }
+
+    /* Sidebar Customization */
+    section[data-testid="stSidebar"] {
+        background: #080D18 !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    section[data-testid="stSidebar"] .block-container {
+        padding-top: 2rem;
+    }
+
+    /* Modern Metric Cards */
+    div[data-testid="stMetric"] {
+        background: rgba(21, 32, 51, 0.6) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 12px !important;
+        padding: 14px 18px !important;
+        backdrop-filter: blur(8px);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    div[data-testid="stMetric"]:hover {
+        transform: translateY(-2px);
+        border-color: rgba(0, 210, 255, 0.4) !important;
+    }
+
+    div[data-testid="stMetricValue"] {
+        color: #00D2FF !important;
+        font-weight: 700 !important;
+    }
+
+    /* Tabs Styling */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background: rgba(13, 20, 36, 0.7);
+        padding: 6px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 8px;
+        padding: 10px 20px;
+        color: #94A3B8;
+        font-weight: 600;
+        font-size: 0.92rem;
+        transition: all 0.2s ease;
+        border: none !important;
+    }
+
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, rgba(0, 210, 255, 0.15) 0%, rgba(112, 0, 255, 0.15) 100%) !important;
+        color: #00D2FF !important;
+        border: 1px solid rgba(0, 210, 255, 0.4) !important;
+    }
+
+    /* Custom Chat Message Bubbles */
+    div[data-testid="stChatMessage"] {
+        background: rgba(21, 32, 51, 0.5) !important;
+        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+        border-radius: 14px !important;
+        padding: 16px !important;
+        margin-bottom: 12px !important;
+        box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* Primary Buttons */
+    .stButton>button[kind="primary"] {
+        background: linear-gradient(135deg, #00D2FF 0%, #0072FF 100%) !important;
+        color: #070D18 !important;
+        font-weight: 700 !important;
+        border: none !important;
+        border-radius: 10px !important;
+        box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3) !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .stButton>button[kind="primary"]:hover {
+        transform: translateY(-1px) !important;
+        box-shadow: 0 6px 20px rgba(0, 210, 255, 0.5) !important;
+    }
+
+    .stButton>button[kind="secondary"] {
+        background: rgba(21, 32, 51, 0.7) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        color: #E2E8F0 !important;
+        border-radius: 10px !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .stButton>button[kind="secondary"]:hover {
+        border-color: #00D2FF !important;
+        color: #00D2FF !important;
+    }
+
+    /* Expanders & Popovers */
+    div[data-testid="stExpander"] {
+        background: rgba(18, 26, 43, 0.6) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 12px !important;
+    }
+
+    /* Dataframe tables */
+    div[data-testid="stDataFrame"] {
+        border: 1px solid rgba(0, 210, 255, 0.15) !important;
+        border-radius: 10px !important;
+        overflow: hidden !important;
+    }
+
+    /* Status indicators */
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    .status-active {
+        background: rgba(16, 185, 129, 0.15);
+        color: #10B981;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .status-standby {
+        background: rgba(245, 158, 11, 0.15);
+        color: #F59E0B;
+        border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
 )
 
 # ── Lazy imports with error handling ─────────────────────────────────────────
@@ -83,9 +283,22 @@ init_session_state()
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 
 with st.sidebar:
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/AUTOSAR_Logo.svg/240px-AUTOSAR_Logo.svg.png", width=120)
-    st.title("🚗 AUTOSAR HLD\nAssistant")
-    st.caption("v0.1.0 – Engineering Prototype")
+    st.markdown(
+        """
+        <div style="padding: 10px 0 15px 0;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <span style="font-size: 1.8rem;">⚡</span>
+                <span style="font-size: 1.25rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.3px;">
+                    AUTOSAR <span style="color: #00D2FF;">HLD</span>
+                </span>
+            </div>
+            <div style="display: inline-block; background: rgba(0, 210, 255, 0.1); color: #00D2FF; border: 1px solid rgba(0, 210, 255, 0.25); border-radius: 12px; padding: 2px 8px; font-size: 0.72rem; font-weight: 600;">
+                v1.2.0 • Traceability Edition
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     st.divider()
 
     pipeline = get_pipeline()
@@ -145,11 +358,18 @@ with st.sidebar:
 
 # ── Main content ──────────────────────────────────────────────────────────────
 
-st.title("🚗 AUTOSAR HLD Document Analysis Assistant")
-st.caption(
-    "Upload AUTOSAR High-Level Design PDF documents and ask questions about software "
-    "components, interfaces, signals, and architecture. "
-    "**This is an engineering prototype. Do not use for official certification.**"
+st.markdown(
+    """
+    <div class="hero-container">
+        <div class="hero-badge">⚡ Next-Gen Automotive RAG Platform</div>
+        <h1 class="hero-title">AUTOSAR HLD Intelligence & Traceability Assistant</h1>
+        <p class="hero-subtitle">
+            Automated Electronic Control Unit (ECU) High-Level Design document analysis, Software Component (SWC) 
+            decomposition, interface & signal traceability, and grounded architectural Q&A powered by two-stage RAG.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 # ── Tabs ──────────────────────────────────────────────────────────────────────
@@ -243,7 +463,58 @@ with tab_qa:
     else:
         # Render helper for assistant response with button to view retrieved chunks
         def render_assistant_response(entry, key_prefix="hist"):
-            st.markdown(entry["answer"])
+            answer_text = entry["answer"]
+            mode = entry.get("mode", "")
+
+            # ── Harmful / Blocked question ──────────────────────────────────
+            if mode == "blocked":
+                st.markdown(
+                    f"""
+                    <div style="
+                        background: rgba(220, 38, 38, 0.12);
+                        border: 1px solid rgba(220, 38, 38, 0.45);
+                        border-radius: 10px;
+                        padding: 14px 18px;
+                        margin: 6px 0;
+                    ">
+                        <span style="color:#F87171; font-size:1rem; font-weight:600;">
+                            🚫 This question cannot be answered.
+                        </span><br/>
+                        <span style="color:#FCA5A5; font-size:0.9rem; line-height:1.6;">
+                            Your query appears to involve harmful, dangerous, or illegal content.
+                            This assistant is designed exclusively for AUTOSAR High-Level Design
+                            document analysis and automotive software architecture questions.
+                            Please rephrase your question in the context of automotive engineering.
+                        </span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+                return  # No chunk/citation buttons for blocked questions
+
+            # ── Information not present in document ─────────────────────────
+            if isinstance(answer_text, str) and answer_text.startswith("NOT_IN_DOCUMENT::"):
+                summary_line = answer_text[len("NOT_IN_DOCUMENT::"):].strip()
+                st.markdown(
+                    f"""
+                    <div style="
+                        background: rgba(220, 38, 38, 0.08);
+                        border: 1px solid rgba(220, 38, 38, 0.35);
+                        border-radius: 10px;
+                        padding: 14px 18px;
+                        margin: 6px 0;
+                    ">
+                        <span style="color:#EF4444; font-size:0.95rem; line-height:1.65;">
+                            {summary_line}
+                        </span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+                return  # No Architectural Breakdown or Citations for missing info
+
+            # ── Normal answer ────────────────────────────────────────────────
+            st.markdown(answer_text)
 
             retrieved_chunks = entry.get("retrieved_chunks", [])
             citations = entry.get("citations", [])
@@ -280,7 +551,7 @@ with tab_qa:
                 "no_results": "⚠️ No matching passages",
                 "error": "❌ LLM error",
                 "no_index": "⚠️ Index not ready",
-            }.get(entry.get("mode", ""), "")
+            }.get(mode, "")
             if mode_badge:
                 with col3:
                     st.caption(f"*{mode_badge}*")

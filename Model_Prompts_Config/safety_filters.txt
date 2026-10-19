@@ -1,0 +1,56 @@
+============================================================
+  HARMFUL QUESTION FILTER — BLOCKED PATTERNS
+============================================================
+
+Category          | Example Trigger Phrases
+------------------|----------------------------------------------------------
+Violence/Weapons  | bomb, explosive, weapon, murder, kill people
+Dangerous Chem    | make drugs, synthesize meth, poison, nerve agent
+Hacking/Malware   | hack into, exploit vulnerability, write malware, ddos attack
+Illegal Activity  | money laundering, fraud, steal data, bypass security
+Self-Harm         | suicide, self-harm, hurt myself
+
+============================================================
+  RESPONSE WHEN TRIGGERED
+============================================================
+
+Mode:     blocked
+UI:       Red warning card with 🚫 icon
+Message:  "This question cannot be answered as it involves harmful, dangerous, or
+           illegal content. Please ask questions related to AUTOSAR or automotive
+           software architecture."
+
+Note: Harmful question detection runs BEFORE any LLM call or vector search.
+      No tokens are consumed. No retrieval is performed.
+
+============================================================
+  NOT-IN-DOCUMENT DETECTION — TRIGGER PHRASES
+============================================================
+
+Phrase detected in Executive Summary → shows only red Executive Summary text,
+hides Architectural Breakdown and Evidence & Citations sections.
+
+Trigger phrases include:
+  - "do not contain"
+  - "not explicitly mentioned"
+  - "not mentioned in"
+  - "no information"
+  - "there is no"
+  - "cannot find"
+  - "not provided in"
+  - "not covered"
+  - "not discussed"
+  - "not addressed"
+  - "not described"
+  - "not found in"
+  - "not available in"
+  - "not present in"
+  - "outside the scope"
+  - "not within the scope"
+  - "cannot answer"
+  - "unable to find"
+  - "no relevant"
+  - "no specific information"
+  - "doesn't contain"
+  - "does not contain"
+  - "not in the document"

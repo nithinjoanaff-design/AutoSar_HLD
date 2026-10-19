@@ -84,6 +84,67 @@ def strip_reasoning_trace(text: str) -> str:
     return text.strip()
 
 
+# ── Harmful Question Guard ────────────────────────────────────────────────────
+
+_HARMFUL_PATTERNS: List[str] = [
+    # Violence / weapons
+    r"\b(how\s+to\s+)?(make|build|create|synthesize|manufacture|assemble)\b.{0,40}\b(bomb|explosive|weapon|gun|missile|mine|grenade|IED|malware|virus|ransomware|trojan)\b",
+    r"\b(kill|murder|assassinate|harm|hurt|attack|shoot)\b.{0,30}\b(person|people|human|someone|anyone|individual)\b",
+    # Dangerous substances
+    r"\b(how\s+to\s+)?(make|produce|synthesize|manufacture)\b.{0,30}\b(poison|toxin|drug|meth|heroin|cocaine|fentanyl|nerve.?agent)\b",
+    # Hacking / intrusion
+    r"\b(hack|crack|exploit|bypass|brute.?force)\b.{0,30}\b(system|network|server|password|account|database|firewall)\b",
+    # Illegal activities
+    r"\b(how\s+to\s+)?(commit|perform|carry\s+out)\b.{0,30}\b(fraud|theft|robbery|phishing|scam|laundering)\b",
+    # Self-harm
+    r"\b(how\s+to\s+)?(commit\s+suicide|kill\s+myself|end\s+my\s+life|self.?harm|cut\s+myself)\b",
+]
+
+_HARMFUL_RE = re.compile("|".join(_HARMFUL_PATTERNS), re.IGNORECASE | re.DOTALL)
+
+
+def is_harmful_question(question: str) -> bool:
+    """Return True if the question matches any harmful / dangerous pattern."""
+    return bool(_HARMFUL_RE.search(question))
+
+
+# ── "Not in document" Detector ────────────────────────────────────────────────
+
+_NOT_FOUND_PHRASES: List[str] = [
+    "do not contain",
+    "does not contain",
+    "not contain explicit",
+    "not explicitly",
+    "no explicit information",
+    "no information",
+    "not found in",
+    "not mentioned in",
+    "not present in",
+    "cannot find",
+    "not available in",
+    "absent from",
+    "no relevant",
+    "none of the provided",
+    "provided passages do not",
+    "document does not",
+    "documents do not",
+    "not specified in",
+    "not discussed in",
+    "there is no",
+    "there are no",
+    "no details",
+    "no data",
+]
+
+def is_not_in_document(executive_summary_text: str) -> bool:
+    """
+    Return True if the Executive Summary content indicates that the requested
+    information is absent from the uploaded document passages.
+    """
+    lowered = executive_summary_text.lower()
+    return any(phrase in lowered for phrase in _NOT_FOUND_PHRASES)
+
+
 def build_verified_citations_table(chunks: List[Dict]) -> str:
     """Build a 100% verified Evidence & Citations table directly from retrieved chunks."""
     rows = []
@@ -113,6 +174,9 @@ def format_and_verify_answer(raw_answer: str, chunks: List[Dict]) -> str:
     2. Architectural Breakdown
     3. Evidence & Citations Summary (with verified document names and page numbers)
     Completely removes all reasoning traces (<think>, <details>) and disclaimers.
+
+    Special case: If the Executive Summary signals "not in document", returns ONLY
+    the summary line prefixed with NOT_IN_DOCUMENT:: so the UI can style it in red.
     """
     clean_text = strip_reasoning_trace(raw_answer)
 
@@ -122,6 +186,19 @@ def format_and_verify_answer(raw_answer: str, chunks: List[Dict]) -> str:
         clean_text,
         flags=re.IGNORECASE,
     )[0].strip()
+
+    # ── Extract just the Executive Summary body for "not in document" detection ──
+    exec_match = re.search(
+        r"###\s*.*?(?:Executive Summary|Direct Answer|Summary).*?\n([\s\S]*?)(?=###|$)",
+        clean_text,
+        flags=re.IGNORECASE,
+    )
+    exec_body = exec_match.group(1).strip() if exec_match else clean_text.strip()
+
+    if is_not_in_document(exec_body):
+        # Return only the Executive Summary text; prefix it so the renderer
+        # knows to show it in red and skip the other two sections entirely.
+        return f"NOT_IN_DOCUMENT::{exec_body}"
 
     verified_table = build_verified_citations_table(chunks)
 
@@ -341,10 +418,25 @@ class LLMProvider:
         -------
         dict with keys:
             answer : str
-            mode   : "llm" | "extractive" | "no_results"
+            mode   : "llm" | "extractive" | "no_results" | "blocked"
             citations : list of {doc_name, page_number}
             provider : str
         """
+        # ── Harmful question guard (checked BEFORE any retrieval or LLM call) ──
+        if is_harmful_question(question):
+            return {
+                "answer": (
+                    "🚫 **This question cannot be answered.**\n\n"
+                    "Your query appears to contain content related to harmful, dangerous, or illegal activities. "
+                    "This assistant is designed exclusively for AUTOSAR High-Level Design document analysis "
+                    "and automotive software architecture questions. "
+                    "Please rephrase your question in the context of automotive engineering."
+                ),
+                "mode": "blocked",
+                "citations": [],
+                "provider": self.provider,
+            }
+
         citations = [
             {"doc_name": c["doc_name"], "page_number": c["page_number"]}
             for c in retrieved_chunks

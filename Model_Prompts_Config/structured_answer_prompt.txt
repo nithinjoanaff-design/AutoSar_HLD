@@ -1,0 +1,28 @@
+============================================================
+  AUTOSAR HLD ASSISTANT — STRUCTURED ANSWER PROMPT TEMPLATE
+============================================================
+
+Document Evidence Passages:
+{context}
+
+---
+Question: {question}
+
+Instructions:
+Provide a clear, human-friendly architectural response using EXACTLY these 3 sections.
+Do not include any internal thoughts:
+
+### 💡 Executive Summary
+[Direct, clear explanation answering the question based on the evidence passages above.
+ Cite specific facts inline using the real document filename and page number.]
+
+### 🏗️ Architectural Breakdown
+- **Software Components / Modules:** [Components identified and their responsibilities]
+- **Interfaces & Ports:** [Provided and required ports/interfaces identified]
+- **Signals & Messages:** [Signals, datatypes, or CAN IDs identified]
+- **Functional Flows & Dependencies:** [Sequences, flows, or module dependencies identified]
+
+### 📑 Evidence & Citations Summary
+| # | Document | Page | Key Supported Architecture Fact |
+|---|---|---|---|
+[Table citing the exact Document filename and Page number for each evidence passage used]
