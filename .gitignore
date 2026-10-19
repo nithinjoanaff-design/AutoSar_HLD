@@ -42,4 +42,3 @@ Thumbs.db
 # Uploaded user data (PDFs in data/)
 data/uploads/
 sample_data/
-*.zip
